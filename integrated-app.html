@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能学习伴侣</title>
+    <link rel="stylesheet" href="integrated-styles.css">
+</head>
+<body>
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>登录</h2>
+                <span class="close" id="close-login">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="phone">手机号</label>
+                    <input type="tel" id="phone" placeholder="请输入手机号">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" placeholder="请输入密码">
+                </div>
+                <button id="login-btn" class="btn-primary">登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 密码验证模态框 -->
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>密码验证</h2>
+                <span class="close" id="close-password">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>请输入访问密码：</p>
+                <div class="form-group">
+                    <input type="password" id="access-password" placeholder="请输入密码">
+                </div>
+                <button id="verify-password-btn" class="btn-primary">验证</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 参赛描述模态框 -->
+    <div id="description-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>参赛描述</h2>
+                <span class="close" id="close-description">&times;</span>
+            </div>
+            <div class="modal-body" id="competition-description">
+                <!-- 动态加载参赛描述内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 头部 -->
+        <header>
+            <div class="header-content">
+                <div class="time-display">
+                    <span id="current-time">00:00:00</span>
+                </div>
+                <h1 class="app-title">智能学习伴侣</h1>
+                <div class="user-info">
+                    <span id="user-status">未登录</span>
+                    <button id="login-trigger" class="btn-secondary">登录</button>
+                    <button id="logout-btn" class="btn-danger" style="display: none;">退出</button>
+                    <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 导航 -->
+        <nav class="main-nav">
+            <ul>
+                <li class="nav-item active" data-tab="home">首页</li>
+                <li class="nav-item" data-tab="study">学习</li>
+                <li class="nav-item" data-tab="focus">专注</li>
+                <li class="nav-item" data-tab="coming-soon">即将开发</li>
+                <li class="nav-item" data-tab="profile">我</li>
+            </ul>
+        </nav>
+
+        <!-- 标签页内容 -->
+        <div class="tab-content">
+            <!-- 首页 -->
+            <div id="home" class="tab-pane active">
+                <div class="welcome-section">
+                    <h2>欢迎使用智能学习伴侣</h2>
+                    <p>提升您的学习效率，掌握更多知识</p>
+                </div>
+                
+                <div class="widgets-section">
+                    <h3>学习小组件</h3>
+                    <div class="widgets-grid">
+                        <div class="widget">
+                            <div id="mini-calendar" class="mini-calendar"></div>
+                        </div>
+                        <div class="widget">
+                            <div id="learning-stats" class="learning-stats"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quick-access">
+                    <button id="competition-desc-btn" class="btn-primary">参赛描述</button>
+                </div>
+            </div>
+
+            <!-- 学习页面 -->
+            <div id="study" class="tab-pane">
+                <div class="study-features">
+                    <div class="study-card" id="smart-question-system">
+                        <h3>智能出题系统</h3>
+                        <p>根据您的需求生成定制化题目</p>
+                    </div>
+                    <div class="study-card" id="wrong-questions">
+                        <h3>错题本</h3>
+                        <p>记录和管理您的错题</p>
+                    </div>
+                    <div class="study-card" id="pomodoro">
+                        <h3>番茄钟</h3>
+                        <p>提高学习专注度</p>
+                    </div>
+                    <div class="study-card" id="calculator">
+                        <h3>科学计算器</h3>
+                        <p>辅助学习计算</p>
+                    </div>
+                    <div class="study-card" id="ai-chat">
+                        <h3>AI对话</h3>
+                        <p>与AI助手交流学习问题</p>
+                    </div>
+                    <div class="study-card" id="experiment-analysis">
+                        <h3>实验分析</h3>
+                        <p>辅助实验数据分析与报告撰写</p>
+                    </div>
+                </div>
+                
+                <div id="study-content" class="study-content">
+                    <!-- 学习功能详情将在这里动态加载 -->
+                </div>
+            </div>
+
+            <!-- 专注页面 -->
+            <div id="focus" class="tab-pane">
+                <div class="focus-module">
+                    <h2>专注学习</h2>
+                    <div class="timer-display" id="timer-display">00:00:00</div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">开始</button>
+                        <button id="pause-timer" class="btn-secondary" disabled>暂停</button>
+                        <button id="reset-timer" class="btn-secondary" disabled>重置</button>
+                    </div>
+                    <div class="duration-setting">
+                        <label for="focus-duration">专注时长（分钟）：</label>
+                        <input type="number" id="focus-duration" min="1" max="120" value="25">
+                    </div>
+                    <div class="quick-focus">
+                        <button class="quick-focus-btn" data-time="15">15分钟</button>
+                        <button class="quick-focus-btn" data-time="25">25分钟</button>
+                        <button class="quick-focus-btn" data-time="45">45分钟</button>
+                    </div>
+                    <div class="focus-stats">
+                        <h3>专注统计</h3>
+                        <p>今日专注次数：0</p>
+                        <p>今日专注总时长：0分钟</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 即将开发页面 -->
+            <div id="coming-soon" class="tab-pane">
+                <div class="beta-warning">
+                    <h2>即将推出的功能</h2>
+                    <p>敬请期待以下功能的发布</p>
+                </div>
+                <div class="beta-features">
+                    <div class="feature-card" id="calendar-card">
+                        <h3>学习日历</h3>
+                        <p>规划学习时间，记录学习进度</p>
+                    </div>
+                    <div class="feature-card" id="notes-card">
+                        <h3>学习笔记</h3>
+                        <p>随时记录学习中的重要知识点</p>
+                    </div>
+                    <div class="feature-card" id="ai-study-card">
+                        <h3>AI学习助手</h3>
+                        <p>智能辅助学习系统</p>
+                    </div>
+                </div>
+                <div class="feedback-section">
+                    <p>如有任何建议或问题，请联系2789791910@qq.com</p>
+                </div>
+            </div>
+
+            <!-- 个人中心页面 -->
+            <div id="profile" class="tab-pane">
+                <div class="profile-info">
+                    <h2>个人信息</h2>
+                    <div class="profile-item">
+                        <span class="profile-label">用户状态：</span>
+                        <span id="profile-user-status">未登录</span>
+                    </div>
+                    <div class="profile-item">
+                        <span class="profile-label">手机号：</span>
+                        <span id="profile-phone">未绑定</span>
+                        <button id="bind-phone-btn" class="btn-secondary">绑定手机</button>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button id="view-updates-btn" class="btn-secondary">查看更新日志</button>
+                </div>
+                <div id="updates-container" class="updates-container" style="display: none;">
+                    <!-- 更新日志将在这里动态加载 -->
+                </div>
+                <div class="app-version">
+                    <p>版本号：7.0.0.1 - China RC</p>
+                </div>
+            </div>
+
+            <!-- 智能出题系统内容 -->
+            <div id="smart-question-system-content" class="tab-pane">
+                <div class="question-generator">
+                    <h2>智能出题系统</h2>
+                    <div class="form-group">
+                        <label for="api-key">API密钥</label>
+                        <input type="text" id="api-key" placeholder="请输入您的API密钥">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="subject">科目</label>
+                            <select id="subject">
+                                <option value="数学">数学</option>
+                                <option value="物理">物理</option>
+                                <option value="化学">化学</option>
+                                <option value="英语">英语</option>
+                                <option value="生物">生物</option>
+                                <option value="历史">历史</option>
+                                <option value="地理">地理</option>
+                                <option value="政治">政治</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty">难度</label>
+                            <select id="difficulty">
+                                <option value="简单">简单</option>
+                                <option value="中等">中等</option>
+                                <option value="困难">困难</option>
+                                <option value="随机">随机</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="question-type">题型</label>
+                            <select id="question-type">
+                                <option value="选择题">选择题</option>
+                                <option value="填空题">填空题</option>
+                                <option value="解答题">解答题</option>
+                                <option value="应用题">应用题</option>
+                                <option value="证明题">证明题</option>
+                                <option value="综合题">综合题</option>
+                                <option value="随机">随机</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="question-count">数量</label>
+                            <input type="number" id="question-count" min="1" max="20" value="5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="additional-requirements">附加要求</label>
+                        <textarea id="additional-requirements" placeholder="可以添加一些具体的要求，例如知识点范围等"></textarea>
+                    </div>
+                    <button id="generate-btn" class="btn-primary">生成题目</button>
+                    <div class="loading-indicator" id="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <span>正在生成题目...</span>
+                    </div>
+                    <div id="generated-questions" class="generated-questions"></div>
+                    <div class="error-codes">
+                        <h3>常见错误码</h3>
+                        <table class="error-code-table">
+                            <thead>
+                                <tr>
+                                    <th>错误码</th>
+                                    <th>描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>401</td>
+                                    <td>API密钥无效或已过期</td>
+                                </tr>
+                                <tr>
+                                    <td>429</td>
+                                    <td>请求过于频繁，请稍后再试</td>
+                                </tr>
+                                <tr>
+                                    <td>500</td>
+                                    <td>服务器内部错误，请稍后再试</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 错题本内容 -->
+            <div id="wrong-questions-content" class="tab-pane">
+                <div class="wrong-questions">
+                    <h2>错题本</h2>
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="wrong-subject-filter">科目</label>
+                            <select id="wrong-subject-filter">
+                                <option value="all">全部</option>
+                                <option value="数学">数学</option>
+                                <option value="物理">物理</option>
+                                <option value="化学">化学</option>
+                                <option value="英语">英语</option>
+                                <option value="生物">生物</option>
+                                <option value="历史">历史</option>
+                                <option value="地理">地理</option>
+                                <option value="政治">政治</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wrong-difficulty-filter">难度</label>
+                            <select id="wrong-difficulty-filter">
+                                <option value="all">全部</option>
+                                <option value="简单">简单</option>
+                                <option value="中等">中等</option>
+                                <option value="困难">困难</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wrong-sort-filter">排序方式</label>
+                            <select id="wrong-sort-filter">
+                                <option value="date">按创建时间</option>
+                                <option value="count">按错误次数</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="wrong-questions-list" class="wrong-questions-container">
+                        <!-- 错题列表将在这里动态加载 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 番茄钟内容 -->
+            <div id="pomodoro-content" class="tab-pane">
+                <div class="pomodoro">
+                    <h2>番茄钟学习法</h2>
+                    <div class="pomodoro-timer" id="pomodoro-timer">25:00</div>
+                    <div class="pomodoro-controls">
+                        <button id="start-pomodoro" class="btn-primary">开始</button>
+                        <button id="stop-pomodoro" class="btn-danger">停止</button>
+                    </div>
+                    <div class="pomodoro-info">
+                        <h3>番茄工作法介绍</h3>
+                        <p>番茄工作法是一种时间管理方法，由弗朗西斯科·西里洛于1980年代创立。</p>
+                        <h4>基本步骤：</h4>
+                        <ol>
+                            <li>选择一个待完成的任务</li>
+                            <li>设置番茄钟（通常为25分钟）</li>
+                            <li>专注工作，直到番茄钟响铃</li>
+                            <li>休息5分钟</li>
+                            <li>每完成四个番茄钟，休息15-30分钟</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 计算器内容 -->
+            <div id="calculator-content" class="tab-pane">
+                <div class="calculator">
+                    <h2>科学计算器</h2>
+                    <div id="calculator-display" class="calculator-display">0</div>
+                    <div class="calculator-buttons">
+                        <button onclick="clearDisplay()">清除</button>
+                        <button onclick="appendToDisplay('(')">(</button>
+                        <button onclick="appendToDisplay(')')">)</button>
+                        <button onclick="appendToDisplay('/')" class="operator">÷</button>
+                        <button onclick="appendToDisplay('7')">7</button>
+                        <button onclick="appendToDisplay('8')">8</button>
+                        <button onclick="appendToDisplay('9')">9</button>
+                        <button onclick="appendToDisplay('*')" class="operator">×</button>
+                        <button onclick="appendToDisplay('4')">4</button>
+                        <button onclick="appendToDisplay('5')">5</button>
+                        <button onclick="appendToDisplay('6')">6</button>
+                        <button onclick="appendToDisplay('-')" class="operator">−</button>
+                        <button onclick="appendToDisplay('1')">1</button>
+                        <button onclick="appendToDisplay('2')">2</button>
+                        <button onclick="appendToDisplay('3')">3</button>
+                        <button onclick="appendToDisplay('+')" class="operator">+</button>
+                        <button onclick="appendToDisplay('.')">.</button>
+                        <button onclick="appendToDisplay('0')">0</button>
+                        <button onclick="appendToDisplay('%')" class="operator">%</button>
+                        <button onclick="calculate()" class="equals">=</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI对话内容 -->
+            <div id="ai-chat-content" class="tab-pane">
+                <div class="ai-chat">
+                    <h2>AI对话助手</h2>
+                    <div class="form-group">
+                        <label for="chat-api-key">API密钥</label>
+                        <input type="text" id="chat-api-key" placeholder="请输入您的API密钥">
+                    </div>
+                    <div class="chat-container" id="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- 聊天消息将在这里动态加载 -->
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="user-message" placeholder="请输入您的问题...">
+                            <button id="send-message-btn" class="btn-primary">发送</button>
+                        </div>
+                    </div>
+                    <div class="loading-indicator" id="chat-loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <span>AI正在思考...</span>
+                    </div>
+                    <div class="chat-actions">
+                        <button id="clear-chat-btn" class="btn-secondary">清除聊天记录</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实验分析内容 -->
+            <div id="experiment-analysis-content" class="tab-pane">
+                <div class="experiment-analysis">
+                    <h2>实验数据分析助手</h2>
+                    <div class="form-group">
+                        <label for="experiment-api-key">API密钥</label>
+                        <input type="text" id="experiment-api-key" placeholder="请输入您的API密钥">
+                    </div>
+                    <form id="experiment-form" class="experiment-form">
+                        <div class="form-group">
+                            <label for="experiment-topic">实验主题</label>
+                            <input type="text" id="experiment-topic" placeholder="请输入实验主题">
+                        </div>
+                        <div class="form-group">
+                            <label for="experiment-purpose">实验目的</label>
+                            <textarea id="experiment-purpose" placeholder="请描述实验目的"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="experiment-method">实验方法</label>
+                            <textarea id="experiment-method" placeholder="请描述实验方法"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="experiment-data">实验数据</label>
+                            <textarea id="experiment-data" placeholder="请输入或粘贴实验数据"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="experiment-variables">变量说明</label>
+                            <textarea id="experiment-variables" placeholder="请说明自变量、因变量和控制变量"></textarea>
+                        </div>
+                        <button type="submit" id="analyze-experiment-btn" class="btn-primary">分析</button>
+                    </form>
+                    <div class="loading-indicator" id="experiment-loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <span>正在分析数据...</span>
+                    </div>
+                    <div id="experiment-result" class="experiment-result">
+                        <!-- 实验分析结果将在这里动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2023 智能学习伴侣 - 提升学习效率的智能助手</p>
+    </footer>
+
+    <!-- 返回首页按钮 -->
+    <button id="return-home-btn" class="return-home-btn">返回首页</button>
+
+    <script src="integrated-scripts.js"></script>
+</body>
+</html>
